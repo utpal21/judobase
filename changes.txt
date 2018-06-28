@@ -1,0 +1,9 @@
+------OLD-----------------|| ---------NEW------------------
+mysql_fetch_array()                  mysqli_fetch_array()
+mysql_num_rows()                     mysqli_num_rows()   
+mysql_result()                       mysqli_result()
+mysql_insert_id($con)                mysqli_insert_id($con)
+mysql_affected_rows($con)            mysqli_affected_rows($con)
+mysql_data_seek($result, $offset)    mysqli_data_seek($result, $offset)
+mysql_real_escape_string($txt)       mysqli_real_escape_string($connection, $txt);
+mysql_num_rows($result)              mysqli_num_rows($ressult) 

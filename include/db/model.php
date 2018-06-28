@@ -556,9 +556,8 @@
 
 		static function printSQLError($sql)
 		{
-			global $g_err_msg;
-			$g_err_msg = "SQL:$sql\nError Detail:"  . mysql_error();
-
+			global $g_err_msg, $connection;
+			$g_err_msg = "SQL:$sql\nError Detail:"  . mysqli_error($connection);
 			_err_log($g_err_msg);
 		}
 	};

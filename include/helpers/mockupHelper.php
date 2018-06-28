@@ -26,16 +26,16 @@
 		
 			$this->read();
 			if ($sql_result != null) {
-				@mysql_data_seek($sql_result, 0);
+				@mysqli_data_seek($sql_result, 0);
 
 				do {
-					$arr = mysql_fetch_array($sql_result);
+					$arr = mysqli_fetch_array($sql_result);
 					if ($arr != null)
 						$this->datas[] = $arr;
 
 				} while($arr);
 
-				@mysql_data_seek($sql_result, 0);
+				@mysqli_data_seek($sql_result, 0);
 			}
 
 			if ($this->must_write)

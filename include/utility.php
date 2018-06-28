@@ -377,6 +377,7 @@
 	// generate sql safe string
 	function _sql($txt)
 	{
+		global $connection;
 		if ($txt === null || $txt === "")
 			return "NULL";
 
@@ -384,7 +385,8 @@
 			return substr($txt, 2);
 
 		//$txt = str_replace("'", "''", $txt);
-		$txt = mysql_real_escape_string($txt);
+		//$txt = mysql_real_escape_string($txt);
+		$txt = mysqli_real_escape_string($connection, $txt);
 		return "'" . $txt . "'";
 	}
 

@@ -40,22 +40,27 @@
 		// connect to database
 		function connect()
 		{
+			global $connection;
 			if (IS_NOMOCKUP || IS_CREATEMOCKUP) {
 				if ($this->conn == null) {
-					$this->conn = @mysqli_connect (DB_HOSTNAME . ":" . DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
-							or die("Database Connection Failed");
+					$this->conn = @mysqli_connect (DB_HOSTNAME . ":" . DB_PORT, DB_USER, DB_PASSWORD, DB_NAME);
+							//or die("Database Connection Failed");
+					if (mysqli_connect_errno()) {
+						die('Database Connection Failed: ' . mysqli_connect_error());
+					}
+					$connection = $this->conn;
 					
 					mysqli_select_db ($this->conn, DB_NAME)
 					or die ("Could not select database");
 
 					$sql = "SET NAMES utf8";
-					@mysqli_query($sql, $this->conn);
+					@mysqli_query($this->conn, $sql);
 
 					//$sql = "SET GLOBAL time_zone = '" . TIME_ZONE . "'";
 					//@mysql_query($sql, $this->conn);
 
 					$sql = "SET time_zone = '" . _time_zone() . "'";
-					@mysqli_query($sql, $this->conn);
+					@mysqli_query($this->conn, $sql);
 				}
 			}
 
@@ -65,7 +70,7 @@
 		function set_time_zone($time_zone)
 		{
 			$sql = "SET time_zone = '" . $time_zone . "'";
-			@mysqli_query($sql, $this->conn);
+			@mysqli_query($this->conn, $sql);
 		}
 
 		// close the connection of database
@@ -78,7 +83,7 @@
 		public function query($sql)
 		{
 			if (IS_NOMOCKUP || IS_CREATEMOCKUP) {
-				$this->sql_result = mysqli_query ($sql, $this->conn);
+				$this->sql_result = mysqli_query ($this->conn, $sql);
 
 				if (IS_CREATEMOCKUP) mockupHelper::createMockup($sql, $this->sql_result);
 
@@ -94,7 +99,7 @@
 		public function scalar($sql)
 		{
 			if (IS_NOMOCKUP || IS_CREATEMOCKUP) {
-				$this->sql_result = mysqli_query ($sql, $this->conn);
+				$this->sql_result = mysqli_query ($this->conn, $sql);
 				
 				if (IS_CREATEMOCKUP) mockupHelper::createMockup($sql, $this->sql_result);
 
@@ -103,10 +108,11 @@
 					return null;
 				}
 
-				if (mysql_num_rows($this->sql_result) != 1)
+				if (mysqli_num_rows($this->sql_result) != 1)
 					return null;
 
-				return mysql_result($this->sql_result, 0, 0);
+				//return mysql_result($this->sql_result, 0, 0);
+        return $this->mysqli_result($this->sql_result, 0, 0);
 			}
 			else { // IS_MOCKUP
 				$this->sql_result = mockupHelper::getMockup($sql);
@@ -118,7 +124,7 @@
 		public function execute($sql)
 		{
 			if (IS_NOMOCKUP || IS_CREATEMOCKUP) {
-				$this->sql_result = mysqli_query($sql, $this->conn);
+				$this->sql_result = mysqli_query($this->conn, $sql);
 
 				return $this->sql_result ? ERR_OK : ERR_SQL;
 			}
@@ -134,7 +140,7 @@
 
 				foreach($sqls as $sql) {
 					if ($sql != "") {
-						$this->sql_result = mysqli_query($sql, $this->conn);
+						$this->sql_result = mysqli_query($this->conn, $sql);
 					}
 				}
 
@@ -171,7 +177,7 @@
 		public function last_id() 
 		{
 			if (IS_NOMOCKUP || IS_CREATEMOCKUP) {
-				return mysql_insert_id($this->conn);
+				return mysqli_insert_id($this->conn);
 			}
 			else { // IS_MOCKUP
 				return 1;
@@ -181,7 +187,7 @@
 		function affected_rows()
 		{
 			if (IS_NOMOCKUP || IS_CREATEMOCKUP) {
-				return mysql_affected_rows($this->conn);
+				return mysqli_affected_rows($this->conn);
 			}
 			else { // IS_MOCKUP
 				return 1;
@@ -191,7 +197,7 @@
 		function fetch_array($result)
 		{
 			if (IS_NOMOCKUP || IS_CREATEMOCKUP) {
-				return mysql_fetch_array($result);
+				return mysqli_fetch_array($result);
 			}
 			else { // IS_MOCKUP
 				return $result->fetch_array();
@@ -230,6 +236,27 @@
 				return ($tbl != "");
 			}
 		}
+
+    /**
+     * @description This method is alternative of deprecated method mysql_result()
+     * @param $res
+     * @param int $row
+     * @param int $col
+     * @return bool?
+     * @author <Utpal Biswas utpal.uoda@gmail.com>
+     * @modify 28/06/2018
+     */
+    private function mysqli_result($res,$row=0,$col=0){
+      $numRows = mysqli_num_rows($res);
+      if ($numRows && $row <= ($numRows-1) && $row >=0){
+        mysqli_data_seek($res,$row);
+        $resRow = (is_numeric($col)) ? mysqli_fetch_row($res) : mysqli_fetch_assoc($res);
+        if (isset($resRow[$col])){
+          return $resRow[$col];
+        }
+      }
+      return false;
+    }
 	};
 
 ?>
