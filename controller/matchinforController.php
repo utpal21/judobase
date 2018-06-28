@@ -30,8 +30,6 @@
 			$competitions = array();
 			$competition = new competition;
 			$err = $competition->query("SELECT * FROM t_competition");
-			/*var_dump($err);
-			die();*/
 			if ($err != ERR_NODATA)
 				$this->checkError($err);
 			while ($err == ERR_OK)
