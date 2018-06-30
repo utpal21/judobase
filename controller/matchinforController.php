@@ -97,8 +97,6 @@
 			$params["sort"] = -1;
 			$params["year"] = "";
 
-
-
 			// get player's personal info
 			$data =_get_content($path, $params);
 			if($data == false)
