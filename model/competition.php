@@ -24,7 +24,8 @@
 					"continent_short",
 					"has_logo",
 					"country",
-					"id_country"),
+					"id_country",
+					"unq_flag"),
 				array("auto_inc" => true));
 		}
 

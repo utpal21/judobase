@@ -113,15 +113,16 @@
 			_set_template("normal");
 			$data = $this->scrap_competition();
 			$count = count($data);
-			if($count >0){
-				$db = db::getDB();
-				$sql = "DELETE FROM t_competition"  ;
-				$db->execute($sql);
-			}
 			for($i =0;$i<$count;$i++){
 				$arrCom = $data[$i];
 				$competition = new competition;
+        $unqVal = base64_encode($arrCom["name"].$arrCom["city"].$arrCom["country"]);
+
+        $res = $competition->query("SELECT * FROM t_competition where unq_flag = '$unqVal'");
+        if ($res == ERR_NODATA)
+
 				if($arrCom["date_from"] != "" || $arrCom["date_to"] !="") {
+
 					$competition->id_competition = $arrCom["id_competition"];
 					$competition->date_from = $arrCom["date_from"];
 					$competition->date_to = $arrCom["date_to"];
@@ -134,6 +135,7 @@
 					$competition->has_logo = $arrCom["has_logo"];
 					$competition->country = $arrCom["country"];
 					$competition->id_country = $arrCom["id_country"];
+					$competition->unq_flag = $unqVal;
 					$err = $competition->save();
 					if ($err != ERR_OK) {
 					} else {
