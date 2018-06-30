@@ -896,6 +896,24 @@
 		return $str;
 	}
 
+	/**
+	 * @param $file
+	 * @return array
+	 * @authr <Utpal Biswas utpal.uoda@gmail.com>
+	 */
+	function _csvFileRead($path)
+	{
+		$file_handle = fopen($path, "r");
+		$data = array();
+		if($file_handle != null) {
+			while (!feof($file_handle) ) {
+				$data[] = fgetcsv($file_handle, 1024);
+			}
+			fclose($file_handle);
+		}
+		return $data;
+	}
+
 	function _basename($file) 
 	{ 
 	    return end(explode('/',$file)); 

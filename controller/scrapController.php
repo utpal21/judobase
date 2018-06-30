@@ -1558,5 +1558,13 @@
 
 			console('end scrapping[time: ' . date("Y-m-d H:i:s") . ']');
 		}
+    /**
+     * @description read scraped csv data
+     * @author <Utpal Biswas[utpal.uoda@gmail.com]>
+     */
+    public function getScrapCsvData(){
+      $filePath = TMP_PATH.'match_manual_competition.csv';
+      $csvData = _csvFileRead($filePath);
+    }
 	}
 ?>
