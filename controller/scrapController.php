@@ -318,6 +318,8 @@
 					$competition["country_short"] = $this->get_country_id($competition["country_short"]);
 
 					$tname_id = $this->get_tname_id($competition);
+					var_dump($tname_id);
+					die("hhh");
 
 					if($tname_id == null)
 						continue;
@@ -369,6 +371,7 @@
 						}
 					}
 				}
+
 			}
 			
 			return ERR_OK;
