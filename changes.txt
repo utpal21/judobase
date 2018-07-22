@@ -1,4 +1,8 @@
 ------OLD-----------------|| ---------NEW------------------
+mysql_connect()                      mysqli_connect()
+mysql_query                          mysqli_query 
+mysql_select_db('db', connection)    mysqli_select_db(connection. 'db')    
+mysql_error()                        mysqli_error() 
 mysql_fetch_array()                  mysqli_fetch_array()
 mysql_num_rows()                     mysqli_num_rows()   
 mysql_result()                       mysqli_result()
@@ -7,3 +11,12 @@ mysql_affected_rows($con)            mysqli_affected_rows($con)
 mysql_data_seek($result, $offset)    mysqli_data_seek($result, $offset)
 mysql_real_escape_string($txt)       mysqli_real_escape_string($connection, $txt);
 mysql_num_rows($result)              mysqli_num_rows($ressult) 
+
+
+
+judobase\include\db\db.php
+judobase\include\db\model.php
+judobase\include\helpers\mockupHelper.php
+judobase\include\utility.php
+judobase\controller\matchinforController.php
+judobase\model\competition.php
